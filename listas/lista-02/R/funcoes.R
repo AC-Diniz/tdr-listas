@@ -28,7 +28,7 @@ salvar_figura <- function(dados, modelo, arquivo = "saidas/dispersao.png") {
   on.exit(dev.off())
   plot(Ozone ~ Temp, data = dados, pch = 20, col = "steelblue",
        xlab = "Radiação Solar (lang)", ylab = "Ozônio (ppb)")
-  abline(modelo, col = "tomato", lwd = 2)
+  abline(modelo, col = "purple", lwd = 2)
   arquivo
 }
 
