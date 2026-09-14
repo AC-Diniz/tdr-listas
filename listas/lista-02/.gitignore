@@ -17,6 +17,7 @@ _targets/
 output/
 *.html
 *.pdf
+saidas/
 
 .Rproj.user/
 .Ruserdata
