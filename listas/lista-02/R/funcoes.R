@@ -31,3 +31,11 @@ salvar_figura <- function(dados, modelo, arquivo = "saidas/dispersao.png") {
   abline(modelo, col = "tomato", lwd = 2)
   arquivo
 }
+
+
+## Salva o quadro de médias mensais em ums CSV e devolve o caminho do arquivo
+salva_tabela <- function(medias, arquivo ="saidas/medias.csv"){
+  dir.create(dirname(arquivo), showWarnings = FALSE, recursive = TRUE)
+  write.csv(medias, arquivo, row.names = FALSE)
+  arquivo
+}
