@@ -1,0 +1,35 @@
+---
+title: "Relatório de Qualidade do Ar: Ozônio e Radiação Solar"
+subtile: "Relatório gerado pelo pipeline de _targets.R"
+author: "Ananda Cristina Diniz"
+lang: pt-BR
+format: 
+  html:
+    embed-resources: true
+---
+
+```{r}
+#| echo: false
+targets::tar_load(c(dados, medias, modelo, figura))
+```
+
+O conjunto de dados original é composto por `r nrow(dados)` registros no total.
+As médias mensais estão na @tbl-medias, e o modelo explica `r round(100 * summary(modelo)$r.squared, 1)`% da variação do ozônio, sobre os `r nobs(modelo)` dias em que as duas variáveis foram medidas.
+
+```{r}
+#| label: tbl-medias
+#| tbl-cap: "Médias mensais de ozônio e de radiação solar"
+#| echo: false
+knitr::kable(medias)
+```
+
+A @fig-dispersao apresenta a relação entre as variáveis analisadas por meio do gráfico gerado pelo pipeline.
+
+```{r}
+#| label: fig-dispersao
+#| fig-cap: "Ozônio contra radiação solar, com a reta ajustada"
+#| echo: false
+knitr::include_graphics(figura)
+```
+
+Por meio da análise, nota-se que o aumento da radição solar está associado a maiores concentrações de ozônio na atmosfera.
