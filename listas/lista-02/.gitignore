@@ -1,0 +1,29 @@
+# Targets de pipeline
+_targets/
+
+
+# Auxiliares do LaTeX e R
+*.aux
+*.log
+*.out
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+.Rhistory
+.RData
+
+# Saídas e relatórios renderizados
+output/
+*.html
+*.pdf
+saidas/
+
+.Rproj.user/
+.Ruserdata
+relatorio.html
+relatorio_files/
+
+#Sistema operacional
+.DS_Store
+Thumbs.bd
