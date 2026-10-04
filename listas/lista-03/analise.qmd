@@ -42,3 +42,36 @@ ano_primeiro <- read_csv2(
 ano_primeiro
 ```
 
+# Exercício 2: Arrumar a tabela 
+
+O objetivo desse exercício é converter a tabela para forma longa, com uma linha por unidade e mês, e dar à coluna de valores o nome do que ela mede, e não `value`. 
+
+```{r}
+library(tidyverse)
+
+# 1. Definição dos níveis dos meses
+meses_nivel <- c("jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez")
+
+# 2. Transformação para a forma longa
+internacoes_longa <- ano_primeiro |>
+  pivot_longer(
+    cols = jan:dez,
+    names_to = "mes",
+    values_to = "internacoes"
+  ) |>
+  mutate(
+    mes = factor(mes, levels = meses_nivel)
+  )
+
+internacoes_longa
+
+# 3. Contagem das linhas da tabela longa e valores ausentes
+n_linhas <- nrow(internacoes_longa)
+n_ausentes <- sum(is.na(internacoes_longa$internacoes))
+
+n_linhas
+n_ausentes
+```
+## Comparação com o `LEIA-ME.txt`
+No documento `LEIA-ME.txt`, o número de unidades com medições corresponde a 8, enquanto que número de linhas da tabela longa é `r n_linhas`, ou seja, 12 vezes o valor das unidades com medições.
+Além disso, o número de valores ausentes (`r n_ausentes`) é igual a "meses sem registro" do primeiro ano no `LEIA-ME.txt`.
