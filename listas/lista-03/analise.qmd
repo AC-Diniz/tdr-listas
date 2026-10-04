@@ -1,0 +1,44 @@
+---
+title: "Relatório de Internações"
+subtitle: "Internações nos hospitais de uma região de saúde Unidade de observação: hospital"
+author: Ananda Cristina Diniz
+lang: pt-BR
+format: 
+  html:
+    embed-resources: true
+    code-fold: false
+
+---
+
+# Exercício 1: O documento e a leitura
+
+Nesse exercício, será feita a leitura inicial dos dados utilizando o pacote `readr`, a fim de identificar o separador decimal, codificação, tipos de colunas e valores ausentes (`NA`).
+
+```{r}
+# Carregando os pacotes
+library(tidyverse)
+library(readr)
+
+# 1. Leitura do cadastro
+cadastro <- read_csv2(
+  file = "dados/cadastro.csv",
+  locale = locale(encoding = "ISO-8859-1"),
+  na = c("", "NA", "N/A")
+)
+
+cadastro
+
+# 2. Leitura do primeiro arquivo anual
+ano_primeiro <- read_csv2(
+  file = "dados/internacoes_2023.csv",
+  locale = locale(decimal_mark = "."),
+  col_types = cols(
+    codigo = col_character(),
+    .default = col_double()
+  ),
+  na = c("", "NA", "-", "NAO_INFORMADO")
+)
+
+ano_primeiro
+```
+
