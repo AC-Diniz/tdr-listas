@@ -75,3 +75,34 @@ n_ausentes
 ## Comparação com o `LEIA-ME.txt`
 No documento `LEIA-ME.txt`, o número de unidades com medições corresponde a 8, enquanto que número de linhas da tabela longa é `r n_linhas`, ou seja, 12 vezes o valor das unidades com medições.
 Além disso, o número de valores ausentes (`r n_ausentes`) é igual a "meses sem registro" do primeiro ano no `LEIA-ME.txt`.
+
+# Exercício 3: Juntar ao cadastro
+O objetivo é juntar as tabelas `cadastro.csv` e `internacoes_longa`, mantendo todas as linhas da tabela longa. Além disso, na tabela juntada, deve ser criada a **medida relativa** com o `mutate()`.
+
+```{r}
+library(tidyverse)
+
+# 1. Juntando a tabela longa ao cadastro
+internacoes_cadastro <- internacoes_longa |>
+  left_join(cadastro, by = "codigo", relationship = "many-to-one")
+
+internacoes_cadastro
+
+# 2. Conferindo se a junção não mudou o número de linhas
+nrow(internacoes_longa) == nrow(internacoes_cadastro)
+
+# 3. Criando a medida relativa: valor de cada mês por porte da unidade
+internacoes_cadastro <- internacoes_cadastro |>
+  mutate(medida_relativa = internacoes/ leitos)
+internacoes_cadastro
+
+# 4. Indentificando qual unidade do cadastro não tem medição alguma
+unidade_sem_medicao <- cadastro |>
+  anti_join(internacoes_longa, by = "codigo")
+
+unidade_sem_medicao
+
+```
+
+## Consolidação das respostas
+Após a junção das tabelas, o número de linhas não se alterou, e a unidade do cadastro sem medição alguma é `r unidade_sem_medicao`.
