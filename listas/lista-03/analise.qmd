@@ -154,8 +154,80 @@ Essa escolha altera a coluna `total_ano` e `media_relativa`, mas não afeta a co
 
 **2. Uso do código em linha sem notação científica:** O total geral de internações registradas no ano de 2023 foi de `r format(sum(resumo_unidade$total_ano), big.mark = ".", decimal.mark = ",")`.
 
+# Exercício 5: Todos os anos de uma vez
+O objetivo é empilhar os outros dois arquivos, `internacoes_2024.csv`e `internacoes_2025.csv`, juntos com `internacoes_2023.csv` em uma única tabela. Ao final, deve ser apresentada uma tabela com o total de cada categoria em cada ano.
 
+```{r}
+library(tidyverse)
+library(readr)
 
+# 1. Leitura das tabelas
+tabelas_anuais <- c("dados/internacoes_2023.csv", "dados/internacoes_2024.csv", "dados/internacoes_2025.csv")
 
+tabela_empilhada <- tabelas_anuais |>
+  set_names(tabelas_anuais) |>
+  map(~ read_csv2(
+    file = .x, 
+    locale = locale(decimal_mark = "."),
+    col_types = cols(
+      codigo = col_character(),
+      .default = col_double()
+    ),
+    na = c("", "NA", "-", "NAO-INFORMADO")
+    )) |>
+  list_rbind(names_to = "origem") |>
+  mutate(
+    ano = parse_number(origem)
+  )
 
+tabela_empilhada
+
+# 2. Definição dos níveis dos meses
+meses_nivel <- c("jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez")
+
+# 3. Transformação para a forma longa e junção com o cadastro
+tabela_completa <- tabela_empilhada |>
+  select(-origem) |>
+  pivot_longer(
+    cols = jan:dez,
+    names_to = "mes",
+    values_to = "internacoes"
+  ) |>
+  mutate(
+    mes = factor(mes, levels = meses_nivel),
+    internacoes = replace_na(internacoes, 0)
+  ) |>
+  left_join(cadastro, by = "codigo", relationship = "many-to-many") |>
+  mutate(medida_relativa = internacoes/ leitos)
+
+tabela_completa
+
+# 4. Criação da tabela de apresentação
+tabela_apresentacao <- tabela_completa |>
+  group_by(natureza, ano) |>
+  summarise(total_anual = sum(internacoes), .groups = "drop") |>
+  pivot_wider(
+    names_from = ano,
+    values_from = total_anual
+  )
+
+tabela_apresentacao
+
+# 5. Calculo dos totais por ano
+total_2023 <- sum(tabela_completa$internacoes[tabela_completa$ano == 2023])
+total_2024 <- sum(tabela_completa$internacoes[tabela_completa$ano == 2024])
+total_2025 <- sum(tabela_completa$internacoes[tabela_completa$ano == 2025])
+
+# 6. Contando os valores ausentes na tabela empilhada
+n_ausentes_total <- tabela_empilhada |>
+  select(jan:dez) |>
+  is.na() |>
+  sum()
+```
+
+## Análise do que foi pedido na entrega
+A `tabela_completa`, correspondente à "tabela empilhada" pedida, tem `r nrow(tabela_completa)` linhas, que é 3 vezes o número de linhas da tabela do **Exercício 2** (`r nrow(internacoes_longa)`).
+
+Após a análise do período entre 2023 e 2025, observa-se que o ano de `2023` registrou um total de `r format(total_2023, big.mark = ".", decimal.mark = ",")` internações. Em `2024`, o total foi de `r format(total_2024, big.mark = ".", decimal.mark = ",")`, e em `2025` foi `r format(total_2025, big.mark = ".", decimal.mark = ",")`.
+Já em relação aos valores ausentes, tem-se um total de `r n_ausentes_total` nas bases anuais originais, mesmo do `LEIA-ME.txt` (4 em 2023, 2 em 2024 e 3 em 2025).
 
