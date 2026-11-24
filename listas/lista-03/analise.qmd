@@ -116,13 +116,15 @@ library(tidyverse)
 
 # 1. Resumo por unidade
 resumo_unidade <- internacoes_cadastro |>
-  mutate(
-    internacoes = replace_na(internacoes, 0), #aqui foi feito o tratamento dos valores ausentes (NA), substituindo-os por 0. Assim, os meses sem registro de internação correspondem a zero internações no período. A decisão afeta o "total_ano" e a "media_relativa", mas não afeta a contagem de unidades ou identificação das categorias
-    medida_relativa = replace_na(medida_relativa, 0)
-  ) |>
   group_by(codigo, nome, natureza) |>
+  mutate(
+    meses_registro = sum(!is.na(internacoes)),
+   #aqui foi feito o tratamento dos valores ausentes (NA), substituindo-os por 0. Assim, os meses sem registro de internação correspondem a zero internações no período. A decisão afeta o "total_ano" e a "media_relativa", mas não afeta a contagem de unidades ou identificação das categorias
+   internacoes = replace_na(internacoes, 0),
+   medida_relativa = replace_na(medida_relativa, 0)
+  ) |>
   summarise(
-    meses_registro = sum(internacoes >= 0),
+    meses_registro = first(meses_registro),
     total_ano = sum(internacoes),
     media_relativa = mean(medida_relativa),
     .groups = "drop"
