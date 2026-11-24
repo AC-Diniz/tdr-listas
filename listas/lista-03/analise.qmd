@@ -200,7 +200,7 @@ tabela_completa <- tabela_empilhada |>
     mes = factor(mes, levels = meses_nivel),
     internacoes = replace_na(internacoes, 0)
   ) |>
-  left_join(cadastro, by = "codigo", relationship = "many-to-many") |>
+  left_join(cadastro, by = "codigo", relationship = "many-to-one") |>
   mutate(medida_relativa = internacoes/ leitos)
 
 tabela_completa
