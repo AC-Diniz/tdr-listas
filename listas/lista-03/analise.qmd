@@ -22,6 +22,7 @@ library(readr)
 # 1. Leitura do cadastro
 cadastro <- read_csv2(
   file = "dados/cadastro.csv",
+  col_types = "cccd",
   locale = locale(encoding = "ISO-8859-1"),
   na = c("", "NA", "N/A")
 )
