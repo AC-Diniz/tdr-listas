@@ -152,8 +152,8 @@ total_geral_formatado <- format(total_geral_ano, big.mark=".", decimal.mark=",")
 
 ## Interpretação do que foi feito
 **1. Tratamento dos meses sem registro:**
-Os valores ausentes (`NA`) foram substituidos por zero utilizando `replace_na()`. Então, a ausência de registro indica zero internações no respectivo mês.
-Essa escolha altera a coluna `total_ano` e `media_relativa`, mas não afeta a contagem das unidades ou identificação de categorias.
+Os valores ausentes (`NA`) foram substituidos por zero utilizando `replace_na()`. Então, a ausência de registro indica um mês não medido, e não necessariamente um mês sem internação alguma.
+Essa escolha altera a coluna `media_relativa`, mas não afeta a contagem das unidades ou identificação de categorias. Com o zero, a média relativa cai (HO06 sai 3,54 em vez de 4,25, a média dos 10 meses medidos). Além disso, o `total_ano` não muda, porque somar zero ou descartar o mês dá o mesmo total.
 
 **2. Uso do código em linha sem notação científica:** O total geral de internações registradas no ano de 2023 foi de `r format(sum(resumo_unidade$total_ano), big.mark = ".", decimal.mark = ",")`.
 
