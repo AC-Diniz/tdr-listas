@@ -1,6 +1,6 @@
 ---
-title: "Relatório de Internações"
-subtitle: "Internações nos hospitais de uma região de saúde Unidade de observação: hospital"
+title: "Internações nos hospitais de uma região de saúde Unidade de observação: hospital"
+subtitle: "Relatório de Internações"
 author: Ananda Cristina Diniz
 lang: pt-BR
 format: 
